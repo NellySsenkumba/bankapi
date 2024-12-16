@@ -1,0 +1,227 @@
+openapi: 3.0.0
+info:
+  title: Bank Api
+  version: 1.0.0
+servers:
+  - url: http://{{url}}
+components:
+  securitySchemes:
+    noauthAuth:
+      type: http
+      scheme: noauth
+    bearerAuth:
+      type: http
+      scheme: bearer
+security:
+  - bearerAuth: [ ]
+tags:
+  - name: Account Details
+  - name: Customer
+  - name: Auth
+  - name: Transaction Logs
+  - name: Transactions
+paths:
+  /account/:
+    get:
+      tags:
+        - Account Details
+      summary: Accounts List
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: { }
+    post:
+      tags:
+        - Account Details
+      summary: Add Accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                customerId: 1
+                accountType: SAVINGS
+                startingAmount: '30000'
+                currency: UGX
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: { }
+  /account/logs/1/:
+    get:
+      tags:
+        - Account Details
+      summary: Account Logs
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: { }
+  /account/{id}/:
+    get:
+      tags:
+        - Account Details
+      summary: Single account
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: { }
+  /customer/:
+    post:
+      tags:
+        - Customer
+      summary: Register Customer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                firstName: Nelly
+                lastName: Joe
+                email: ssenkumba.nelson@sybyl.com
+                phoneNumber: '0726076260'
+                address: kololo
+                dob: 10/09/2003
+                nin: CM031045DA7PA
+                gender: MALE
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: { }
+    get:
+      tags:
+        - Customer
+      summary: List Customers
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: { }
+  /customer/{id}/:
+    get:
+      tags:
+        - Customer
+      summary: Single Customer
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: { }
+    put:
+      tags:
+        - Customer
+      summary: Edit Customer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                firstName: Joseph
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: { }
+  /login/:
+    post:
+      tags:
+        - Auth
+      summary: Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: admin
+                password: admin
+      security:
+        - noauthAuth: [ ]
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: { }
+  /transaction-logs/:
+    get:
+      tags:
+        - Transaction Logs
+      summary: All Transaction Logs
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: { }
+  /transactions/deposit/:
+    post:
+      tags:
+        - Transactions
+      summary: Deposit
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                accountNumber: '917755990'
+                amount: '40000'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: { }
+  /transactions/withdraw/:
+    post:
+      tags:
+        - Transactions
+      summary: Withdraw
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                accountNumber: '917755990'
+                amount: '10000'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: { }
+  /:
+    get:
+      tags:
+        - default
+      summary: Test Connection
+      security:
+        - noauthAuth: [ ]
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: { }

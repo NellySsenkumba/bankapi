@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bank-api
+  namespace: bank-api
+  labels:
+    app: bank-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bank-api
+  template:
+    metadata:
+      name: bank-api
+      labels:
+        app: bank-api
+    spec:
+      containers:
+        - name: bank-api
+          image: nellyssenkumba/bankapi:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 7200
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: db-connector
+      restartPolicy: Always
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bank-api
+spec:
+  selector:
+    app: bank-api
+  ports:
+    - protocol: TCP
+      port: 7200
+      targetPort: 7200
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bank-api
+  namespace: bank-api
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: bank-api
+                port:
+                  number: 7200
+      host: bank-api.local
+
